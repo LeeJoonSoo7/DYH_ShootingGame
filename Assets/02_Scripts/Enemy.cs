@@ -23,10 +23,10 @@ public class Enemy : MonoBehaviour
         //적군이 플레이어와 접촉하였는가?
         if (collision.collider.CompareTag("Player"))
         {
-            // 점수 1점 혹득!
-            GameManager.Instance.AddScore();
+            // 플레이어의 사망을 GameManager에게 알림
+            GameManager.Instance.OnPlayerDeath();
 
-            // 적군 사망처리
+            // 플레이어 사망처리 (파괴)
             Destroy(collision.gameObject);
         }
     }

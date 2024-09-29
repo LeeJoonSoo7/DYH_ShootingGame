@@ -28,6 +28,9 @@ public class Projectile : MonoBehaviour
     {
         if(other.CompareTag("Enemy"))
         {
+            // Á¡¼ö 1Á¡ È¤µæ!
+            GameManager.Instance.AddScore();
+
             Instantiate(prefab_particle_boom, other.transform.position, Quaternion.identity);
             Destroy(other.gameObject);
             Destroy(gameObject);

@@ -29,4 +29,16 @@ public class Player : MonoBehaviour
             transform.Translate(Vector3.right * moveSpeed * Time.deltaTime);
         }
     }
+
+    private void Dash()
+    {
+        if (!Input.GetKey(KeyCode.Space))
+        {
+            PlayerAim _playerAim = GetComponent<PlayerAim>();
+            Vector3 dir = _playerAim.worldPos - transform.position;
+            dir = dir.normalized;
+            dir = dir * 100f;
+            GetComponent<Rigidbody>().AddForce(dir, ForceMode.Impulse);
+        }
+    }
 }

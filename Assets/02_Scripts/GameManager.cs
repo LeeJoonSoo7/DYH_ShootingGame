@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public UIController uiController;
+
     public int Score    //프로퍼티 Property : 데이터를 은닉, 변경되는걸 제한
     {
         get
@@ -46,5 +48,28 @@ public class GameManager : MonoBehaviour
     public void AddScore()
     {
         Score++;
+        uiController.UpdateScoreTextUI(Score);
+    }
+
+    // 플레이어가 죽었을 때의 호출하는 함수
+    public void OnPlayerDeath()
+    {
+        uiController.SetGameOverUIGroupActive(true);
+
+        // 최고 점수 갱신
+        int _bestScore = 0;
+        string _key = "BEST_SCORE";
+        if (PlayerPrefs.HasKey(_key))
+        {
+            _bestScore = PlayerPrefs.GetInt(_key);
+        }
+
+        if (_bestScore < this.Score)
+        {
+            PlayerPrefs.SetInt(_key, this.Score);
+            _bestScore = this.Score;
+        }
+
+        uiController.UpdateBestScoreText(_bestScore);
     }
 }
