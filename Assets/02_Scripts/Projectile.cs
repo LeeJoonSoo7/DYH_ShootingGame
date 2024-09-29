@@ -5,9 +5,32 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     public float moveSpeed;
+    public GameObject prefab_particle_boom; // Àû±º »ç¸Á ½Ã Æø¹ß ÆÄÆ¼Å¬
 
+    private void Start()
+    {
+        Invoke("KillMyself", 3.0f);
+    }
+
+    // Update is called once per frame
     void Update()
     {
-        transform.Translate(transform.forward * moveSpeed * Time.deltaTime);
+        transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
+    }
+
+    private void KillMyself()
+
+    {
+        Destroy(gameObject);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("Enemy"))
+        {
+            Instantiate(prefab_particle_boom, other.transform.position, Quaternion.identity);
+            Destroy(other.gameObject);
+            Destroy(gameObject);
+        }
     }
 }

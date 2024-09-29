@@ -1,38 +1,57 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class PlayerAim : MonoBehaviour
 {
-    public GameObject bullet;
+    public Vector3 screenPos;
+    public Vector3 worldPos;
+    public LayerMask layersOnHit;
+    public Transform aimPoint;
+    public GameObject prefab_bullet;
+    public GameObject particle_muzzleFlashe;    // 총구 화염 파티클 오브젝트 참조용 변수
 
     private void Update()
     {
         Aim();
-        if (Input.GetMouseButtonDown(0))
+        if(Input.GetMouseButtonDown(0))
         {
             Shoot();
+            particle_muzzleFlashe.SetActive(true);
+        }
+        else
+        {
+            particle_muzzleFlashe.SetActive(false);
         }
     }
 
     public void Aim()
     {
-        Vector3 mousePos = Input.mousePosition;
-        mousePos.z = 10f;
-        mousePos = Camera.main.ScreenToWorldPoint(mousePos);
-        mousePos.y = transform.position.y;
-        Debug.DrawRay(transform.position, mousePos - transform.position, Color.green);
+        screenPos = Input.mousePosition;
+
+        Ray ray = Camera.main.ScreenPointToRay(screenPos);
+
+        if(Physics.Raycast(ray, out RaycastHit hitInfo, 100, layersOnHit))
+        {
+            worldPos = hitInfo.point;
+            worldPos.y = transform.position.y;
+        }
+        aimPoint.transform.position = worldPos;
     }
 
     private void Shoot()
     {
-        Vector3 mousePos = Input.mousePosition;
-        mousePos.z = 10f;
-        mousePos = Camera.main.ScreenToWorldPoint(mousePos);
-        mousePos.y = transform.position.y;
+        screenPos = Input.mousePosition;
 
-        GameObject _bullet = Instantiate(bullet, transform.position, Quaternion.identity);
-        _bullet.transform.LookAt(mousePos - transform.position);
+        Ray ray = Camera.main.ScreenPointToRay(screenPos);
+
+        if (Physics.Raycast(ray, out RaycastHit hitInfo, 100, layersOnHit))
+        {
+            worldPos = hitInfo.point;
+            worldPos.y = transform.position.y;
+        }
+
+        GameObject _obj = Instantiate(prefab_bullet, transform.position, Quaternion.identity);
+        _obj.transform.LookAt(worldPos);
     }
 }

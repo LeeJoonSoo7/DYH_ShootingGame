@@ -5,7 +5,6 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public float moveSpeed;
-
     private void FixedUpdate()
     {
         Movement();
@@ -17,17 +16,14 @@ public class Player : MonoBehaviour
         {
             transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
         }
-
         if (Input.GetKey(KeyCode.S))
         {
             transform.Translate(Vector3.back * moveSpeed * Time.deltaTime);
         }
-
         if (Input.GetKey(KeyCode.A))
         {
             transform.Translate(Vector3.left * moveSpeed * Time.deltaTime);
         }
-
         if (Input.GetKey(KeyCode.D))
         {
             transform.Translate(Vector3.right * moveSpeed * Time.deltaTime);
